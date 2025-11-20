@@ -1,12 +1,10 @@
-{{config(materialized = 'incremental', unique_key='nation_id', on_schema_change="sync_all_columns")}}
+{{config(materialized = 'incremental', unique_key='nation_id')}}
 
 with nation as(
     select 
     nation_id,
     region_id,
     nation_name,
-    nation_comment,
-    jodo_col,
     current_timestamp() as updated_at
     from {{ref('stg_nations')}}
 

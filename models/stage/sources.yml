@@ -16,6 +16,7 @@ sources:
       - name: lineitems
       - name: parts 
       - name: suppliers
+      - name: partsupps
   - name: src2
     database: mkmotors_dev
     schema: staging
