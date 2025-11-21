@@ -1,4 +1,4 @@
-{% snapshot stg_orders %}
+{% snapshot scd_orders %}
 {{
     config(
         target_database='analytics',

@@ -6,29 +6,53 @@ models:
         description: '{{doc("primary_key")}}'
         data_tests:
           - not_null
-          - unique          
+          - unique
       - name: region_name
         data_tests:
           - accepted_values:
               arguments:
-                values: ['AFRICA', 'AMERICA', 'ASIA']
+                values:
+                  [
+                    "AFRICA",
+                    "AMERICA",
+                    "ASIA",
+                    "MIDDLE EAST",
+                    "SOUTH EAST",
+                    "EUROPE",
+                  ]
                 config:
                   store_failures: true
                   schema: error
   - name: stg_nations
+    config:
+      group: sales
+      contract:
+        enforced: true
     columns:
       - name: nation_id
         description: '{{doc("primary_key")}}'
-
         data_tests:
           - not_null
           - unique
+        data_type: int
+        constraints:
+          - type: not_null
+      - name: name
+        data_type: string
+      - name: updated_at
+        data_type: timestamp    
       - name: region_id
         data_tests:
           - relationships:
               to: ref('stg_regions')
               field: region_id
+        data_type: int    
+
+
   - name: stg_customers
+    config:
+      group: sales
+      pre_hook: 'alter session set query_tag="hooks"'
     columns:
       - name: customer_id
         description: '{{doc("primary_key")}}'
@@ -40,12 +64,13 @@ models:
           - relationships:
               to: ref('stg_nations')
               field: nation_id
+              config:
+                store_failures: true
   - name: stg_orders
-
     columns:
       - name: order_id
         description: '{{doc("primary_key")}}'
-        data_tests: 
+        data_tests:
           - not_null
           - unique
       - name: customer_id
@@ -53,17 +78,23 @@ models:
           - relationships:
               to: ref('stg_customers')
               field: customer_id
+              config:
+                store_failures: true
       - name: status_code
         data_tests:
           - accepted_values:
-              values: ['F', 'O', 'P']
+              config:
+                store_failures: true
+              arguments:
+                values: ["F", "O", "P"]
 
   - name: stg_line_items
     description: Table with all line item information
     columns:
       - name: order_item_id
         description: '{{doc("primary_key")}}'
-              
+
+
 seeds:
   - name: suppliers
     config:
