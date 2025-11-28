@@ -7,14 +7,38 @@ sources:
       - name: v_nations
       - name: regions
       - name: nations
+        columns:
+          - name: n_nationkey
+            description: '{{doc("primary_key")}}'
+            data_tests:
+              - not_null
+              - unique
+            data_type: int
+            constraints:
+              - type: not_null
+          - name: n_name
+            data_type: string
+          - name: updated_at
+            data_type: timestamp
+          - name: n_regionkey
+            data_tests:
+              - relationships:
+                  arguments:
+                    to: ref('stg_regions')
+                    field: region_id
+            data_type: int
       - name: orders
         config:
-          freshness: 
-            warn_after: {count: 1, period: day}
-            error_after: {count: 3, period: day}
+          freshness:
+            warn_after:
+              count: 10
+              period: day
+            error_after:
+              count: 30
+              period: day
           loaded_at_field: o_orderdate::timestamp_ntz
       - name: lineitems
-      - name: parts 
+      - name: parts
       - name: suppliers
       - name: partsupps
   - name: src2

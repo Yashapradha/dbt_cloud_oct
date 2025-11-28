@@ -11,15 +11,7 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values:
-                  [
-                    "AFRICA",
-                    "AMERICA",
-                    "ASIA",
-                    "MIDDLE EAST",
-                    "SOUTH EAST",
-                    "EUROPE",
-                  ]
+                values: ["AFRICA", "AMERICA", "ASIA", "MIDDLE EAST", "SOUTH EAST", "EUROPE"]
                 config:
                   store_failures: true
                   schema: error
@@ -37,17 +29,17 @@ models:
         data_type: int
         constraints:
           - type: not_null
-      - name: name
+      - name: nation_name
         data_type: string
       - name: updated_at
-        data_type: timestamp    
+        data_type: timestamp_ltz
       - name: region_id
         data_tests:
           - relationships:
-              to: ref('stg_regions')
-              field: region_id
-        data_type: int    
-
+              arguments:
+                to: ref('stg_regions')
+                field: region_id
+        data_type: int
 
   - name: stg_customers
     config:
@@ -62,10 +54,11 @@ models:
       - name: nation_id
         data_tests:
           - relationships:
-              to: ref('stg_nations')
-              field: nation_id
               config:
                 store_failures: true
+              arguments:
+                to: ref('stg_nations')
+                field: nation_id
   - name: stg_orders
     columns:
       - name: order_id
@@ -76,10 +69,11 @@ models:
       - name: customer_id
         data_tests:
           - relationships:
-              to: ref('stg_customers')
-              field: customer_id
               config:
                 store_failures: true
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
       - name: status_code
         data_tests:
           - accepted_values:
@@ -98,4 +92,5 @@ models:
 seeds:
   - name: suppliers
     config:
-      +alias: suppliers_name
+      meta:
+        +alias: suppliers_name

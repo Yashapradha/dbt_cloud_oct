@@ -10,10 +10,10 @@ regions as (
     SELECT *
     FROM {{ ref('stg_regions') }}
 )
-SELECT
-    *
-FROM customers c
- JOIN nations n
-    ON c.nation_id = n.nation_id
-JOIN regions r
-    ON n.region_id = r.region_id
+select c.*,n.nation_name as nation_name,n.updated_at,r.region_id as region_id,r.region_name as region_name,
+r.region_comment as region_comment
+from customers c
+join nations n
+    on c.nation_id = n.nation_id
+join regions r
+    on n.region_id = r.region_id
