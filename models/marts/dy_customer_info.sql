@@ -1,6 +1,7 @@
 {{ config(
-    materialized = 'ephemeral',
-
+    materialized = 'dynamic_table',
+    target_lag = '10 minutes',
+    snowflake_warehouse = 'TRANSFORM_WH'
 ) }}
 with dy as (
 select 

@@ -16,8 +16,11 @@ regions as (
     from {{ ref('stg_regions') }}
 )
 
-select s.*,n.nation_name as nation_name,n.updated_at,r.region_id as region_id,r.region_name as region_name,
-r.region_comment as region_comment
+select
+    s.* exclude nation_id,
+    n.nation_name as nation_name,
+    r.region_name as region_name,
+    {{jinja_functions()}}
 from suppliers s
 join nations n
     on s.nation_id = n.nation_id
